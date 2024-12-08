@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <unordered_map>
 #include <expected>
+#include <numeric>
 
 enum class input_error
 {
@@ -72,7 +73,6 @@ auto get_difference_score(std::string filename) -> std::expected<int, input_erro
     std::vector<int> list_one_nums;
     std::vector<int> list_two_nums;
     std::vector<int> differences;
-    int total_distance = 0;
 
     auto list_pair = get_number_lists(filename);
     if (list_pair.has_value())
@@ -86,10 +86,7 @@ auto get_difference_score(std::string filename) -> std::expected<int, input_erro
     for (int i = 0; i < list_one_nums.size(); ++i)
         differences.push_back(abs(list_one_nums[i] - list_two_nums[i]));
 
-    for (const auto & difference : differences)
-        total_distance += difference;
-
-    return total_distance;
+    return std::accumulate(differences.begin(), differences.end(), 0);
 }
 
 auto get_similarity_score(std::string filename) -> std::expected<int, input_error> 
